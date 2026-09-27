@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.local
+.env.production
+.env.production.local
+
+# Next.js build output
+.next/
+
+# PM2
+*.pid
+*.log
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
