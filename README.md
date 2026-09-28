@@ -99,3 +99,4 @@ pm2 stop yutuhub
 
 MIT
 ## Git Week2 Practice
+- Learned git status, diff, add and commit workflow.
