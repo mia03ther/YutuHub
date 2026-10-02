@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "prebuild": "npm run lint",
     "prestart": "npm run build",
+    "postinstall": "prisma generate",
     "server:build": "tsc -p tsconfig.server.json",
     "server:start": "node dist/server/index.js"
   },

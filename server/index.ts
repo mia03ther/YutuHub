@@ -5,12 +5,12 @@
 // Runs on PORT (default 3001) alongside the Next.js frontend
 // (port 3000).
 //
-// Architecture target:
-//   Next.js Web (3000) → REST API (3001) → MySQL
+// Architecture:
+//   Next.js Web (3000) → REST API (3001) → SQLite (Prisma)
 //
 // Usage:
-//   npm run server:dev   # build + run
-//   npm run server:start # run compiled output
+//   npm run server:build   # compile TypeScript to ./dist
+//   npm run server:start   # run compiled output
 // ============================================================
 
 import express from "express";
@@ -18,7 +18,7 @@ import cors from "cors";
 import apiRouter from "./routes";
 import { requestLogger } from "./middleware/requestLogger";
 import { notFoundHandler, errorHandler } from "./middleware/errorHandler";
-import { closePool } from "./utils/database";
+import { prisma } from "./utils/prisma";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
@@ -43,23 +43,36 @@ app.use(notFoundHandler);
 // Global error handler (must be last)
 app.use(errorHandler);
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log(`[YutuHub API] Server running on port ${PORT} (${NODE_ENV})`);
-});
+let server: ReturnType<typeof app.listen>;
 
 // Graceful shutdown
 const shutdown = async (): Promise<void> => {
   console.log("\n[YutuHub API] Shutting down...");
-  server.close(() => {
+  server.close(async () => {
+    await prisma.$disconnect();
     console.log("[YutuHub API] Server closed");
     process.exit(0);
   });
-
-  await closePool();
 };
 
 process.on("SIGTERM", shutdown);
 process.on("SIGINT", shutdown);
+
+// Start server — establish the Prisma engine eagerly so a bad datasource
+// config fails fast. Note that SQLite creates a missing database file on
+// connect, so this validates the connection config, not that migrations
+// have been applied.
+const start = async (): Promise<void> => {
+  await prisma.$connect();
+
+  server = app.listen(PORT, () => {
+    console.log(`[YutuHub API] Server running on port ${PORT} (${NODE_ENV})`);
+  });
+};
+
+start().catch((err: unknown) => {
+  console.error("[YutuHub API] Failed to start:", err);
+  process.exit(1);
+});
 
 export default app;
