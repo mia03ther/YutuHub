@@ -7,6 +7,9 @@
 # Next.js build output
 .next/
 
+# Server build output
+dist/
+
 # PM2
 *.pid
 *.log
