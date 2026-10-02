@@ -60,10 +60,10 @@ server/
 │   ├── requestLogger.ts  # HTTP request logging
 │   └── errorHandler.ts   # 404 + 500 error handling
 ├── services/
-│   └── postService.ts    # Post business logic (mock-backed)
+│   └── postService.ts    # Post business logic (Prisma-backed)
 ├── utils/
-│   ├── database.ts       # MySQL connection pool (stub)
-│   ├── mockData.ts       # In-memory mock data
+│   ├── prisma.ts         # PrismaClient singleton + lifecycle
+│   ├── mockData.ts       # Legacy in-memory mock data (unused)
 │   └── response.ts       # Standardized API response helpers
 ├── types/
 │   └── index.ts          # Shared TypeScript interfaces
@@ -77,12 +77,21 @@ server/
 | `PORT`        | `3001`   | Port the API server listens on       |
 | `NODE_ENV`    | `development` | Runtime environment              |
 | `CORS_ORIGIN` | `*`      | CORS allow-list for frontend/Mini   |
-| `DATABASE_URL`| *(unset)*| MySQL connection string *(future)*  |
+| `DATABASE_URL`| `file:./yutuhub.db` | SQLite file, relative to `prisma/` |
 
 ## Database
 
-Schema is defined in `database/schema.sql` and is **not** connected yet.
-The server currently returns mock data for all endpoints.
+Schema is defined in `prisma/schema.prisma` and managed by Prisma against a
+local SQLite file. `database/schema.sql` documents the intended MySQL design.
+
+```bash
+npx prisma migrate dev --name <change>   # create + apply a migration
+npx prisma migrate status                # verify the database is in sync
+```
+
+`DATABASE_URL` is resolved relative to the `prisma/` directory, so both the
+Prisma CLI and the running server open the same file. The database file itself
+is git-ignored; migrations under `prisma/migrations/` are tracked.
 
 ## Production Notes
 
