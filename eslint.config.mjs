@@ -12,7 +12,21 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Server build output and local practice artifacts:
+    "dist/**",
+    "git-clone-test/**",
   ]),
+  {
+    // Server files: allow intentionally-unused params (underscore-prefixed)
+    // in stubs and Express middleware signatures.
+    files: ["server/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;

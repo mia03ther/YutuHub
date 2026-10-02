@@ -26,6 +26,52 @@
 - **样式**：Tailwind CSS 4
 - **图标**：lucide-react
 - **字体**：Geist（next/font）
+- **后端 API**：Express + TypeScript（计划中）
+- **数据库**：MySQL（计划中）
+
+## 项目结构
+
+```
+.
+├── app/              # Next.js 前端 (App Router)
+├── components/       # React 组件
+├── lib/              # 前端逻辑 (mock 数据 + localStorage)
+├── server/           # Node.js REST API 服务器 (Express)
+│   ├── routes/       # API 路由
+│   ├── middleware/   # 中间件 (日志、错误处理)
+│   ├── services/     # 业务逻辑
+│   ├── utils/        # 工具 (数据库连接、响应格式)
+│   └── types/        # TypeScript 类型定义
+├── database/         # 数据库 schema
+├── miniprogram/      # 微信小程序 (计划中)
+└── public/           # 静态资源
+```
+
+## API 服务器
+
+独立的 Node.js API 服务器，使用 Express 构建，运行在端口 3001。
+
+```bash
+# 构建 API 服务器
+npm run server:build
+
+# 启动 API 服务器
+npm run server:start
+```
+
+API 路由：
+
+| 方法 | 路径 | 描述 |
+|------|------|------|
+| GET | `/api/health` | 健康检查 |
+| GET | `/api/posts` | 帖子列表 (筛选、排序、分页) |
+| GET | `/api/posts/:id` | 单个帖子详情 |
+| POST | `/api/posts` | 创建帖子 (桩函数) |
+| POST | `/api/posts/:id/like` | 点赞 (桩函数) |
+| POST | `/api/posts/:id/favorite` | 收藏 (桩函数) |
+| POST | `/api/posts/:id/report` | 举报 (桩函数) |
+
+详情请见 [server/README.md](server/README.md)。
 
 ## 本地运行
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { items, categories, type Item } from "@/lib/mock-data";
 import { addFavorite, getFavorites, removeFavorite } from "@/lib/storage";
 import Navbar from "@/components/navbar";
@@ -18,11 +18,7 @@ export default function Home() {
   const [sort, setSort] = useState("推荐");
   const [selected, setSelected] = useState<Item | null>(null);
   const [publishOpen, setPublishOpen] = useState(false);
-  const [favoredIds, setFavoredIds] = useState<number[]>([]);
-
-  useEffect(() => {
-    setFavoredIds(getFavorites());
-  }, []);
+  const [favoredIds, setFavoredIds] = useState<number[]>(() => getFavorites());
 
   const toggleFavorite = (item: Item) => {
     setFavoredIds((prev) => {
