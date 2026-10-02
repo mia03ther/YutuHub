@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./yutuhub.db"
+}
+
+model Post {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @default(0)
+  categoryId    Int      @default(0)
+  title         String
+  content       String
+  /// JSON-encoded array of image URLs (SQLite has no scalar list type).
+  images        String   @default("[]")
+  price         String?
+  /// 0 = public author, 1 = anonymous.
+  isAnonymous   Int      @default(0)
+  /// 0 = pending, 1 = active, 2 = deleted, 3 = taken down.
+  status        Int      @default(1)
+  views         Int      @default(0)
+  likeCount     Int      @default(0)
+  favoriteCount Int      @default(0)
+  commentCount  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId])
+  @@index([categoryId])
+  @@index([likeCount])
+  @@index([views])
+}
