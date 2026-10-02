@@ -9,6 +9,7 @@
 
 # Server build output
 dist/
+*.tsbuildinfo
 
 # PM2
 *.pid
@@ -27,5 +28,11 @@ node_modules/
 .DS_Store
 Thumbs.db
 
+# Local SQLite databases (schema + migrations under prisma/ stay tracked)
+*.db
+*.sqlite
+*.sqlite3
+
 # Git
 .git/
+/lib/generated/prisma

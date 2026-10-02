@@ -26,7 +26,7 @@ const router = Router();
  *   limit     — items per page (default 20, max 100)
  *   user_id   — filter by author
  */
-router.get("/posts", (req, res) => {
+router.get("/posts", async (req, res) => {
   const query: PostsQuery = {
     category: req.query.category as string | undefined,
     search: req.query.search as string | undefined,
@@ -37,7 +37,7 @@ router.get("/posts", (req, res) => {
   };
 
   try {
-    const result = listPosts(query);
+    const result = await listPosts(query);
     res.json(sendSuccess(result, "Posts retrieved"));
   } catch {
     res.status(500).json(sendError("Failed to retrieve posts"));
@@ -48,7 +48,7 @@ router.get("/posts", (req, res) => {
  * GET /api/posts/:id
  * Retrieve a single post by its ID.
  */
-router.get("/posts/:id", (req, res) => {
+router.get("/posts/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -56,7 +56,7 @@ router.get("/posts/:id", (req, res) => {
     return;
   }
 
-  const post = getPostById(id);
+  const post = await getPostById(id);
 
   if (!post) {
     res.status(404).json(sendError("Post not found"));
@@ -84,7 +84,7 @@ const createPostSchema = z.object({
   is_anonymous: z.boolean().optional(),
 });
 
-router.post("/posts", (req, res) => {
+router.post("/posts", async (req, res) => {
   const parsed = createPostSchema.safeParse(req.body);
 
   if (!parsed.success) {
@@ -93,7 +93,7 @@ router.post("/posts", (req, res) => {
   }
 
   try {
-    const post: Post = createPost({
+    const post: Post = await createPost({
       user_id: parsed.data.user_id,
       category_id: parsed.data.category_id,
       title: parsed.data.title,
@@ -115,7 +115,7 @@ router.post("/posts", (req, res) => {
  *
  * TODO: Implement actual like toggling with real user identity.
  */
-router.post("/posts/:id/like", (req, res) => {
+router.post("/posts/:id/like", async (req, res) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -123,7 +123,7 @@ router.post("/posts/:id/like", (req, res) => {
     return;
   }
 
-  const post = getPostById(id);
+  const post = await getPostById(id);
 
   if (!post) {
     res.status(404).json(sendError("Post not found"));
@@ -140,7 +140,7 @@ router.post("/posts/:id/like", (req, res) => {
  *
  * TODO: Implement actual favorite persistence with real user identity.
  */
-router.post("/posts/:id/favorite", (req, res) => {
+router.post("/posts/:id/favorite", async (req, res) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -148,7 +148,7 @@ router.post("/posts/:id/favorite", (req, res) => {
     return;
   }
 
-  const post = getPostById(id);
+  const post = await getPostById(id);
 
   if (!post) {
     res.status(404).json(sendError("Post not found"));
@@ -170,7 +170,7 @@ const reportSchema = z.object({
   reason: z.string().min(1).max(500),
 });
 
-router.post("/posts/:id/report", (req, res) => {
+router.post("/posts/:id/report", async (req, res) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -178,7 +178,7 @@ router.post("/posts/:id/report", (req, res) => {
     return;
   }
 
-  const post = getPostById(id);
+  const post = await getPostById(id);
 
   if (!post) {
     res.status(404).json(sendError("Post not found"));
