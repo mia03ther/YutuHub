@@ -1,109 +1,47 @@
-type HeroProps = {
-  query: string;
-  onQueryChange: (query: string) => void;
-  onClear: () => void;
-  onSearchClick: () => void;
-};
+import { HeroCta, HeroSearch } from "@/components/hero-interactive";
+import { COMMUNITY_STATS } from "@/lib/data";
 
-export default function Hero({
-  query,
-  onQueryChange,
-  onClear,
-  onSearchClick,
-}: HeroProps) {
+export function Hero() {
   return (
-    <section className="border-b border-black/5">
-      <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 md:px-8 md:pb-28 md:pt-24">
-        <div className="max-w-4xl">
-          <div className="mb-6 text-sm font-medium text-neutral-400">
-            YU TU ZHI HUI · CAMPUS MARKETPLACE
-          </div>
+    <section className="relative overflow-hidden border-b border-border-line">
+      <div className="grid-backdrop pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
 
-          <h1 className="text-5xl font-black leading-[1.02] tracking-[-0.045em] md:text-8xl">
-            屿途知汇
-            <span className="block text-neutral-300">
-              大学生自己的信息集市
-            </span>
+      <div className="relative mx-auto w-full max-w-6xl px-5 pb-20 pt-20 sm:px-8 sm:pb-28 sm:pt-28">
+        <div className="animate-rise">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border-line bg-surface px-3 py-1 text-xs text-muted">
+            <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />
+            AI Native Campus Knowledge &amp; Service Hub
+          </span>
+
+          <h1 className="display-tight mt-6 max-w-3xl text-4xl font-bold sm:text-5xl lg:text-6xl">
+            连接校园知识，
+            <br className="hidden sm:block" />
+            让 AI 加速成长
           </h1>
 
-          <p className="mt-8 max-w-2xl text-base leading-8 text-neutral-500 md:text-lg">
-            服务、AI 产品、技能、二手物品与校园信息。
-            找到你需要的，也把你会的东西放到这里。
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            面向高校学生的新一代 AI 驱动知识与服务社区
           </p>
 
-          <div className="mt-10 flex max-w-3xl overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm focus-within:border-black/20 focus-within:shadow-md">
-            <div className="flex items-center pl-5 text-neutral-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-4 w-4"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-            </div>
-            <input
-              value={query}
-              onChange={(e) => onQueryChange(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  onSearchClick();
-                }
-              }}
-              placeholder="搜索服务、商品、AI 产品、作者……"
-              className="min-w-0 flex-1 bg-transparent px-3 py-4 text-sm outline-none placeholder:text-neutral-400"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={onClear}
-                className="mr-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/5 text-neutral-400 transition hover:bg-black/10 hover:text-black"
-                aria-label="清空搜索"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-3.5 w-3.5"
-                >
-                    <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </button>
-            )}
-
-            <button
-              onClick={() => onSearchClick()}
-              className="m-1 rounded-xl bg-[#171717] px-6 text-sm font-semibold text-white transition hover:bg-black/80"
-            >
-              搜索
-            </button>
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {["技术", "AI", "二手", "求职"].map((name) => (
-              <button
-                key={name}
-                onClick={() => {
-                  document
-                    .getElementById("categories")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="rounded-full border border-black/10 bg-white px-3.5 py-2 text-xs text-neutral-500 transition hover:border-black/20 hover:text-black"
-              >
-                #{name}
-              </button>
-            ))}
-          </div>
+          <HeroSearch />
+          <HeroCta />
         </div>
+
+        <dl className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border-line bg-border-line sm:mt-20 lg:grid-cols-4">
+          {COMMUNITY_STATS.map((stat) => (
+            <div key={stat.label} className="bg-surface px-5 py-6">
+              <dt className="sr-only">{stat.label}</dt>
+              <dd>
+                <span className="block text-2xl font-semibold tabular-nums tracking-tight">
+                  {stat.value}
+                </span>
+                <span className="mt-1 block text-xs text-muted-soft">
+                  {stat.label}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
