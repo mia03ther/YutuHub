@@ -1,175 +1,112 @@
-# YutuHub
+# YutuHub / 屿途知汇
 
-> AI Native Campus Knowledge & Service Hub
-> 面向高校学生的新一代 AI 驱动知识与服务社区
+> 让校园里的真实信息，重新流动起来。
 
-YutuHub 把高校学生里散落的经验做成可检索、可修订、可交换的知识资产：AI 工具选型、课程与竞赛方法、技能互换、学生项目。
+屿途知汇是面向大学生的校园生活共创平台。我们希望把分散在聊天群、口头经验和个人笔记中的校园信息沉淀下来，让课程评价、食堂体验、二手信息与校园互助更容易被发现、补充和验证。
 
----
+项目第一阶段以广东外语外贸大学为主要校园，并通过统一的校园配置为未来扩展到广州大学城及更多高校预留空间。
 
-## 五个核心方向
+## 当前进度
 
-| 方向 | 入口 | 说明 |
-|---|---|---|
-| AI 工具库 | `/tools` | 按学科与场景整理，含定价、上手成本与学生实测记录 |
-| 技能交换 | `/skills` | 用会的东西换不会的，贡献值结算，不可提现 |
-| 学习 Wiki | `/wiki` | 可修订文档库，修订历史公开 |
-| 社区动态 | `/community` | 提问、组队、开源、提需求 |
-| 项目展示 | `/projects` | 学生 Builder 作品集与招募入口 |
+仓库目前已经完成品牌与账户体系的基础建设：
 
-激励体系见 `/levels`（Contributor 等级）与 `/badges`（徽章）。
+- 新版首页与响应式视觉体验，展示选课、干饭、二手交易和校园社区等产品方向
+- 登录、分步注册、服务协议与隐私政策页面
+- 基于 Prisma 的用户数据模型与数据库迁移
+- 真实的密码账户注册与密码登录，密码通过 `crypto.scrypt` 哈希后存储
+- 基于签名 Session 和 HttpOnly Cookie 的登录态、当前用户查询与退出登录
+- 受登录保护的个人中心，展示昵称、学校、邮箱、手机号及验证状态
+- 集中的校园配置与学校邮箱域名校验；当前仅广东外语外贸大学开放注册
+- 邮件与短信验证 Provider 接口及未配置状态处理
 
----
+邮件验证码和短信验证码服务目前尚未接入，因此快捷登录与真实邮箱、手机验证暂未开放。开发阶段允许创建基础密码账户，账户会明确保持为“待验证”状态，不会通过测试验证码伪造验证结果。
+
+## 产品模块
+
+| 模块 | 状态 | 说明 |
+| --- | --- | --- |
+| 品牌首页 | 已实现 | 呈现产品定位、核心场景与校园生活模块入口 |
+| 校园账户 | 基础能力已实现 | 支持注册、密码登录、Session 登录态、退出与个人中心；身份验证 Provider 待接入 |
+| 选课指南 | Planned | 课程与教师信息、学生真实评价和选课经验 |
+| 干饭指南 | Planned | 食堂、档口、菜品信息与学生真实体验 |
+| 二手交易 | Planned | 面向校内场景的闲置物品发布与流转 |
+| 校园社区 | Planned | 校园话题、经验分享与同学互助 |
+| 校园服务 | Planned | 聚合常用校园办事与生活服务信息 |
+| 校园活动、校园猫咪等 | Planned | 按校园需求逐步扩展的生活内容模块 |
+
+首页中的业务场景目前主要用于展示产品方向，不代表相应业务模块已经上线。
 
 ## 技术栈
 
-| 层 | 选型 | 版本 |
-|---|---|---|
-| 框架 | Next.js（App Router，Turbopack） | 16.3.6 |
-| UI | React Server Components 优先 | 19.2.8 |
-| 语言 | TypeScript（`strict`） | 5.x |
-| 样式 | Tailwind CSS v4（CSS-first token） | 4.x |
-| 图标 | lucide-react | 1.48.0 |
-| 字体 | Geist / Geist Mono（`next/font`） | — |
-| Markdown | react-markdown + remark-gfm | — |
-| 数据库 | Prisma + SQLite | 6.19.3 |
-| API | Express + Zod | 5.x / 4.x |
+| 类别 | 技术 |
+| --- | --- |
+| Web 框架 | Next.js 16.3.6（App Router） |
+| UI | React 19.2.8、Tailwind CSS 4、Lucide React |
+| 开发语言 | TypeScript 5 |
+| 数据库 | Prisma 6.19.3、SQLite |
+| 认证 | jose 6.2.12、Node.js `crypto.scrypt`、HttpOnly Cookie Session |
+| 服务端 | Next.js Route Handlers、Express 5.2.1、Zod 4.6.5 |
+| 动效 | GSAP 3.15.0、Lenis 1.3.26 |
 
----
+项目要求 Node.js 20 或更高版本、npm 9 或更高版本。
 
-## 架构原则
+## 本地开发
 
-**Server Component 优先。** 只有需要交互的叶子节点才标 `"use client"`。首页与所有列表页都是 RSC，服务端直接取数，不经客户端。
+以下命令适用于 Windows PowerShell：
 
-**数据层与表现层分离。** `lib/data.ts` 是内容源，`lib/repository.ts` 是唯一的读取入口，组件永远不直接 import 数据源。接入真实 API 时只改 repository。
+```powershell
+git clone https://github.com/mia03ther/YutuHub.git
+Set-Location YutuHub
 
-**设计 token 单一来源。** 全部颜色、圆角、阴影来自 `app/globals.css` 的 `@theme inline` 映射。组件里不写硬编码色值。
-
-**暗色模式零 JS 成本。** 通过 `:root` / `.dark` CSS 变量切换，`app/layout.tsx` 在首帧前注入脚本避免闪烁，用户偏好存 `localStorage`。
-
----
-
-## 目录结构
-
-```
-.
-├── app/                    # App Router
-│   ├── layout.tsx          # 根布局：字体、metadata、站点导航
-│   ├── page.tsx            # 首页
-│   ├── loading.tsx         # 全站骨架屏
-│   ├── error.tsx           # 路由级错误边界
-│   ├── global-error.tsx# 根错误边界
-│   ├── not-found.tsx       # 404
-│   ├── sitemap.ts          # /sitemap.xml
-│   ├── robots.ts           # /robots.txt
-│   ├── about/              # 定位与内容规范
-│   ├── badges/             # 徽章体系
-│   ├── community/          # 社区动态
-│   ├── levels/             # Contributor 等级
-│   ├── projects/           # 项目展示
-│   ├── skills/             # 技能交换
-│   ├── tools/              # AI 工具库 + 详情页（SSG）
-│   └── wiki/               # 学习 Wiki + 词条页（SSG）
-├── components/             # 展示组件（RSC）+ *-interactive / theme-toggle（Client）
-├── lib/
-│   ├── data.ts             # 内容源（唯一数据定义处）
-│   ├── repository.ts       # 读取入口（唯一对外数据 API）
-│   ├── seo.ts              # per-page metadata 构造器
-│   ├── site.ts             # 站点常量
-│   ├── nav.ts              # 导航配置
-│   ├── track-icons.ts      # 赛道图标映射
-│   └── types.ts            # 领域模型类型
-├── server/                 # 独立 Express API（端口 3001）
-│   ├── routes/             # 路由层
-│   ├── services/           # 业务逻辑 + Prisma
-│   ├── middleware/         # 日志、统一错误处理
-│   └── utils/              # Prisma 单例、响应封装
-├── prisma/                 # schema + migrations
-├── docs/
-│   ├── TECHNICAL_AUDIT.md  # 技术审计报告
-│   └── DEPLOY.md           # 部署文档
-└── public/
-```
-
----
-
-## 环境变量
-
-完整说明见 [`.env.example`](.env.example)。最关键的两个：
-
-| 变量 | 必填 | 说明 |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | 生产必填 | 站点规范 URL，影响 sitemap / robots / canonical / OG |
-| `DATABASE_URL` | 是 | Prisma 连接串，本地默认 `file:./yutuhub.db` |
-
-其余见 `.env.example`。只有 `NEXT_PUBLIC_*` 前缀的变量会进入浏览器包。
-
----
-
-## 本地运行
-
-```bash
 npm install
+Copy-Item .env.example .env.local
 
-# 配置环境变量
-cp .env.example .env.local
-
-# 初始化数据库（首次）
 npx prisma migrate dev
 
-# 开发
-npm run dev            # http://localhost:3000
+npm run dev
+```
 
-# 类型检查
+启动后访问 [http://localhost:3000](http://localhost:3000)。
+
+请根据 [`.env.example`](.env.example) 准备本地环境变量。生产环境必须设置长度不少于 32 个字符的 `SESSION_SECRET`；不要把真实密钥或 `.env` 文件提交到仓库。当前 Prisma 配置使用本地 SQLite，`migrate dev` 会应用仓库中已有的迁移，Prisma Client 会由 `npm install` 的 `postinstall` 自动生成。
+
+常用检查命令：
+
+```powershell
 npm run typecheck
-
-# Lint
 npm run lint
-
-# 生产构建
 npm run build
-
-# 生产启动
-npm run start
 ```
 
-### 独立 API 服务器
+## 项目结构
 
-```bash
-npm run server:build   # 编译到 dist/
-npm run server:start   # 监听 API_PORT，默认 3001
+```text
+YutuHub/
+├── app/                 # Next.js 页面与 Route Handlers
+│   └── api/auth/        # 注册、登录、退出、会话与验证接口
+├── components/          # 首页、认证与通用界面组件
+├── lib/                 # 校园配置、认证、校验与共享类型
+├── prisma/              # Prisma schema 与数据库迁移
+├── server/              # 独立 Express 服务
+├── public/              # 静态资源
+└── docs/                # 项目技术与部署说明
 ```
 
----
+## Roadmap
 
-## 质量门禁
+| 阶段 | 状态 | 目标 |
+| --- | --- | --- |
+| Phase 1 | 已完成 | 品牌定位、新版首页与核心视觉体验 |
+| Phase 2 | 进行中 | 校园身份与账户系统；密码账户基础已完成，邮件和短信验证待接入 |
+| Phase 3 | Planned | 选课指南：课程、教师、评价与检索 |
+| Phase 4 | Planned | 干饭指南：食堂、档口、菜品与体验评价 |
+| Phase 5 | Planned | 二手交易与校园社区 |
+| Phase 6 | Planned | 从广东外语外贸大学扩展到广州大学城及更多高校 |
 
-提交前必须全绿：
+## 贡献
 
-```bash
-npm run typecheck && npm run lint && npm run build
-```
-
-`npm run build` 的 `prebuild` 会自动跑 lint，类型检查由 Next.js 在构建时执行。
-
----
-
-## 部署
-
-完整步骤见 [`docs/DEPLOY.md`](docs/DEPLOY.md)。
-
-- **Web**：Vercel 或任意支持 Node 长驻的服务器（PM2）
-- **API**：独立 Node 进程 + PM2，不能放 Serverless（Prisma 需要长驻连接）
-- **小程序**：见 `YutuHub-miniapp` 仓库
-
----
-
-## 技术审计
-
-架构现状、缺陷清单与重构路线见 [`docs/TECHNICAL_AUDIT.md`](docs/TECHNICAL_AUDIT.md)。
-
----
+YutuHub 仍处于积极开发阶段。欢迎通过 Issue 提交问题、产品建议和校园需求，也欢迎针对明确问题发起 Pull Request。提交代码前，请运行类型检查、Lint 和生产构建，确保改动与当前产品方向一致，并清楚区分已实现能力与规划功能。
 
 ## License
 
-MIT
+[MIT](LICENSE)
