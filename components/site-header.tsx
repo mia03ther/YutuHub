@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE } from "@/lib/site";
 import { TRACK_LINKS } from "@/lib/nav";
 import { ThemeToggle } from "./theme-toggle";
+import { AuthNavActions } from "./auth/auth-nav-actions";
 
 export function SiteHeader() {
   return (
@@ -33,12 +34,7 @@ export function SiteHeader() {
 
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
-          <Link
-            href="/community"
-            className="rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-background transition hover:opacity-90"
-          >
-            加入
-          </Link>
+          <AuthNavActions />
         </div>
       </div>
 

@@ -7,6 +7,25 @@ datasource db {
   url      = "file:./yutuhub.db"
 }
 
+model User {
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  phone           String?
+  username        String    @unique
+  displayName     String
+  passwordHash    String
+  campusId        String
+  emailVerified   Boolean   @default(false)
+  phoneVerified   Boolean   @default(false)
+  termsAcceptedAt DateTime
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now()) @updatedAt
+
+  @@index([campusId])
+  @@index([createdAt])
+}
+
 model Post {
   id            Int      @id @default(autoincrement())
   userId        Int      @default(0)

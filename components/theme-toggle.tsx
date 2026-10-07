@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { Monitor, Moon, Sun } from "lucide-react";
 
 type Selection = "light" | "dark" | "system";
 type Resolved = "light" | "dark";
 
-const STORAGE_KEY = "yutuhub-theme";
+const STORAGE_KEY = "theme";
 const CHANGE_EVENT = "yutuhub-theme-change";
 
 const listeners = new Set<() => void>();
@@ -67,12 +67,15 @@ export function ThemeToggle() {
       // Ignore storage failures; the theme still applies for this session.
     }
 
-    document.documentElement.classList.toggle(
-      "dark",
-      next === "dark" ||
-        (next === "system" &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches),
-    );
+    const resolved: Resolved =
+      next === "system"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+        : next;
+
+    document.documentElement.classList.toggle("dark", resolved === "dark");
+    document.documentElement.dataset.theme = resolved;
 
     emit();
   }, []);
@@ -86,6 +89,12 @@ export function ThemeToggle() {
     { value: "dark", label: "深色", Icon: Moon },
     { value: "system", label: "跟随系统", Icon: Monitor },
   ];
+
+  // Keep the DOM attribute in sync (covers system-preference changes too).
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", resolved === "dark");
+    document.documentElement.dataset.theme = resolved;
+  }, [resolved]);
 
   return (
     <div

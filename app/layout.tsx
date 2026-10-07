@@ -13,17 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "屿途知汇 YuTuHub — 知识·技能·协作平台",
+  title: "屿途知汇 YuTuHub — 校园信息共创平台",
   description:
-    "连接知识、技能与创造力的现代协作平台。探索AI工具、技能资源、学习资料与社区交流。",
+    "面向大学生的校园信息共创平台，连接课程避坑、干饭指南、校园交易与经验分享。",
   keywords: [
     "屿途知汇",
     "YuTuHub",
-    "知识协作",
-    "技能交换",
-    "AI工具",
+    "校园生活",
+    "选课指南",
+    "干饭指南",
+    "二手交易",
     "学习资源",
-    "社区交流",
+    "校园社区",
   ],
 };
 
@@ -32,7 +33,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="zh-CN"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          // Apply the persisted theme before first paint to avoid a flash.
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem("theme");var d=s==="dark"||((!s||s==="system")&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d){document.documentElement.dataset.theme="dark";document.documentElement.classList.add("dark");}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>

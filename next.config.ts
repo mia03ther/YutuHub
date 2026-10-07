@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
-const nextConfig: NextConfig = {
+const baseConfig: NextConfig = {
   // 生产环境优化
   reactStrictMode: true,
   compress: true,
@@ -22,4 +23,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default function nextConfig(phase: string): NextConfig {
+  return {
+    ...baseConfig,
+    // Keep production builds isolated from a concurrently running dev server.
+    ...(phase === PHASE_PRODUCTION_BUILD ? { distDir: ".next-build" } : {}),
+  };
+}
