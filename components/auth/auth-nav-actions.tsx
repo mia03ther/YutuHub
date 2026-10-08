@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { AuthApiResponse, AuthUser } from "@/lib/user-types";
 
-export function AuthNavActions({ variant = "default" }: { variant?: "default" | "home" }) {
+type AuthNavLabels = { login: string; register: string; profile: string };
+
+export function AuthNavActions({ variant = "default", labels = { login: "登录", register: "注册", profile: "个人中心" } }: { variant?: "default" | "home"; labels?: AuthNavLabels }) {
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
 
   useEffect(() => {
@@ -36,15 +38,15 @@ export function AuthNavActions({ variant = "default" }: { variant?: "default" | 
         href="/profile"
         className={`flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-xs font-medium transition ${
           variant === "home"
-            ? "border border-white/15 text-[#f5f5f5] hover:border-white/30"
+            ? "border border-[var(--home-line)] text-[var(--home-fg)] hover:border-[var(--home-fg)]/30"
             : "border border-border text-foreground hover:bg-card-hover"
         }`}
       >
-        <span className={`flex size-6 items-center justify-center rounded-full text-[11px] font-semibold ${variant === "home" ? "bg-[#b7ff3c] text-[#080808]" : "bg-foreground text-background"}`}>
+        <span className={`flex size-6 items-center justify-center rounded-full text-[11px] font-semibold ${variant === "home" ? "bg-[var(--klein)] text-white" : "bg-foreground text-background"}`}>
           {user.displayName.slice(0, 1).toUpperCase()}
         </span>
         <span className="max-w-24 truncate">{user.displayName}</span>
-        <span className={variant === "home" ? "text-[#8a8a8a]" : "text-muted"}>个人中心</span>
+        <span className={variant === "home" ? "text-[var(--home-muted)]" : "text-muted"}>{labels.profile}</span>
       </Link>
     );
   }
@@ -55,21 +57,21 @@ export function AuthNavActions({ variant = "default" }: { variant?: "default" | 
         href="/login"
         className={
           variant === "home"
-            ? "rounded-full px-3 py-1.5 text-[13px] font-medium text-[#a0a0a0] transition-colors hover:text-[#f5f5f5]"
+            ? "rounded-full px-3 py-1.5 text-[13px] font-medium text-[var(--home-muted)] transition-colors hover:text-[var(--home-fg)]"
             : "rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted transition hover:text-foreground"
         }
       >
-        登录
+        {labels.login}
       </Link>
       <Link
         href="/register"
         className={
           variant === "home"
-            ? "rounded-full bg-[#f5f5f5] px-3.5 py-1.5 text-[13px] font-medium text-[#080808] transition-opacity hover:opacity-85"
+            ? "rounded-full bg-[var(--home-fg)] px-3.5 py-1.5 text-[13px] font-medium text-[var(--home-bg)] transition-opacity hover:opacity-85"
             : "rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-background transition hover:opacity-90"
         }
       >
-        注册
+        {labels.register}
       </Link>
     </div>
   );

@@ -35,14 +35,14 @@ export default function AboutPage() {
       <PageIntro
         eyebrow="ABOUT"
         title="关于 YutuHub"
-        description="一个面向高校学生的 AI 驱动综合服务平台。我们想解决的不是信息缺失，而是同一份经验被反复重新发现。"
+        description="一个面向大学生的校园生活共创平台。我们想解决的不是信息缺失，而是有价值的经验总被困在群聊、口头与个人笔记里。"
       />
 
       <section className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8">
         <div className="space-y-10">
           <div>
             <h2 className="editorial text-xl font-semibold tracking-tight">
-              五个方向
+              当前已实现的五个共建方向
             </h2>
             <ul className="mt-4 space-y-3">
               {TRACKS.map((track) => (

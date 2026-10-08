@@ -6,6 +6,14 @@ import { Monitor, Moon, Sun } from "lucide-react";
 type Selection = "light" | "dark" | "system";
 type Resolved = "light" | "dark";
 
+export interface ThemeToggleLabels {
+  group?: string;
+  label?: string;
+  light: string;
+  dark: string;
+  system: string;
+}
+
 const STORAGE_KEY = "theme";
 const CHANGE_EVENT = "yutuhub-theme-change";
 
@@ -48,7 +56,14 @@ function subscribe(listener: () => void): () => void {
   };
 }
 
-export function ThemeToggle() {
+const DEFAULT_LABELS: ThemeToggleLabels = {
+  group: "主题",
+  light: "明亮",
+  dark: "深色",
+  system: "跟随系统",
+};
+
+export function ThemeToggle({ labels = DEFAULT_LABELS }: { labels?: ThemeToggleLabels }) {
   const selection = useSyncExternalStore(
     subscribe,
     readSelection,
@@ -76,6 +91,10 @@ export function ThemeToggle() {
 
     document.documentElement.classList.toggle("dark", resolved === "dark");
     document.documentElement.dataset.theme = resolved;
+    document.documentElement.dataset.themeSelection = next;
+    document.documentElement.style.colorScheme = resolved;
+    document.documentElement.classList.add("theme-changing");
+    window.setTimeout(() => document.documentElement.classList.remove("theme-changing"), 260);
 
     emit();
   }, []);
@@ -85,23 +104,24 @@ export function ThemeToggle() {
     label: string;
     Icon: typeof Sun;
   }> = [
-    { value: "light", label: "浅色", Icon: Sun },
-    { value: "dark", label: "深色", Icon: Moon },
-    { value: "system", label: "跟随系统", Icon: Monitor },
+    { value: "light", label: labels.light, Icon: Sun },
+    { value: "dark", label: labels.dark, Icon: Moon },
+    { value: "system", label: labels.system, Icon: Monitor },
   ];
 
   // Keep the DOM attribute in sync (covers system-preference changes too).
   useEffect(() => {
     document.documentElement.classList.toggle("dark", resolved === "dark");
     document.documentElement.dataset.theme = resolved;
+    document.documentElement.style.colorScheme = resolved;
   }, [resolved]);
 
   return (
     <div
       role="group"
-      aria-label="主题"
+      aria-label={labels.group ?? labels.label ?? "Theme"}
       data-resolved={resolved}
-      className="inline-flex items-center gap-0.5 rounded-lg border border-border-line p-0.5"
+      className="glass-segmented inline-flex items-center gap-0.5 p-0.5"
     >
       {options.map(({ value, label, Icon }) => (
         <button
@@ -111,7 +131,7 @@ export function ThemeToggle() {
           aria-label={label}
           title={label}
           onClick={() => select(value)}
-          className={`rounded-md p-1.5 transition ${
+          className={`glass-segment p-1.5 transition ${
             selection === value
               ? "bg-surface-sunken text-foreground"
               : "text-muted-soft hover:text-foreground"

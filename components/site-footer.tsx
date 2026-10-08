@@ -10,19 +10,15 @@ const RESOURCE_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border-line bg-surface-sunken">
-      <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="site-footer border-t border-white/15 bg-[#080808] text-[#f2f0e9]">
+      <div className="mx-auto w-full max-w-[90rem] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_0.7fr_0.7fr_1fr]">
           <div>
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex size-6 items-center justify-center rounded-md bg-foreground text-[11px] font-bold text-background">
-                屿
-              </span>
-              <span className="text-sm font-semibold tracking-tight">
-                {SITE.name}
-              </span>
+            <Link href="/" className="inline-flex items-end gap-3">
+              <span className="text-[clamp(2.5rem,5vw,5.5rem)] font-bold leading-[0.8] tracking-[-0.07em]">YUTU</span>
+              <span className="pb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-background/55">屿途知汇</span>
             </Link>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
+            <p className="mt-7 max-w-sm text-base leading-relaxed text-background/60">
               {SITE.tagline}
             </p>
           </div>
@@ -68,16 +64,16 @@ export function SiteFooter() {
               社区约定
             </h2>
             <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>AI 生成内容一律标注来源</li>
-              <li>不发布未授权的商业推广</li>
-              <li>贡献值不可交易、不可提现</li>
+              <li>真实经验优先于流量</li>
+              <li>信息来源可以被追溯</li>
+              <li>校园共同建设、共同维护</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-border-line pt-6 text-xs text-muted-soft sm:flex-row sm:items-center sm:justify-between">
           <p>© {SITE.name}. 保留所有权利。</p>
-          <p>面向高校学生的 AI 原生知识与服务社区</p>
+          <p>让校园里的真实信息，重新流动起来。</p>
         </div>
       </div>
     </footer>

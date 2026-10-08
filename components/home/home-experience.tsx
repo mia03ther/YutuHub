@@ -30,6 +30,15 @@ export function HomeExperience({ children }: { children: ReactNode }) {
     const html = document.documentElement;
     const previousScrollBehavior = html.style.scrollBehavior;
     html.style.scrollBehavior = "auto";
+    const pinScenes = window.matchMedia("(min-width: 768px)").matches;
+
+    const onPointerMove = (event: PointerEvent) => {
+      const x = (event.clientX / window.innerWidth - 0.5) * 18;
+      const y = (event.clientY / window.innerHeight - 0.5) * 18;
+      root.style.setProperty("--pointer-x", `${x}px`);
+      root.style.setProperty("--pointer-y", `${y}px`);
+    };
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
 
     lenis = new Lenis({ duration: 1.15, smoothWheel: true });
     lenis.on("scroll", ScrollTrigger.update);
@@ -71,32 +80,26 @@ export function HomeExperience({ children }: { children: ReactNode }) {
     root.addEventListener("click", onAnchorClick);
 
     const ctx = gsap.context(() => {
-      /* ----------------------------------------------------------
-         Scene 1 — Hero: chars split & scatter, brand regroups
-      ---------------------------------------------------------- */
+      /* Scene 1 — the single pinned desktop sequence: the portal opens. */
       gsap
         .timeline({
           scrollTrigger: {
             trigger: "#top",
             start: "top top",
-            end: "+=120%",
+            end: pinScenes ? "+=85%" : "bottom top",
             scrub: 1,
-            pin: true,
+            pin: pinScenes,
             anticipatePin: 1,
           },
         })
-        .to(
-          ".hero-line .char-mask",
-          {
-            xPercent: () => gsap.utils.random(-140, 140),
-            yPercent: () => gsap.utils.random(-50, 50),
-            opacity: 0,
-            stagger: { each: 0.05, from: "center" },
-            ease: "power2.in",
-          },
-          0,
-        )
-        .to(".hero-fade", { opacity: 0, y: -26, ease: "none" }, 0)
+        .to(".hero-word", { xPercent: (index) => index === 0 ? -28 : 34, opacity: 0, ease: "power2.in" }, 0)
+        .to(".portal-ring-outer", { rotateZ: 32, rotateY: 68, scale: 1.08, ease: "power2.inOut" }, 0)
+        .to(".portal-ring-inner", { rotateZ: -24, rotateX: 71, scale: 0.88, ease: "power2.inOut" }, 0)
+        .to(".portal-fold-a", { xPercent: -24, rotate: -18, opacity: 0.18, ease: "power2.in" }, 0.05)
+        .to(".portal-fold-b", { xPercent: 28, rotate: 20, opacity: 0.18, ease: "power2.in" }, 0.05)
+        .to(".portal-aperture", { scale: 1.45, opacity: 0, ease: "power2.in" }, 0.25)
+        .to(".portal-device", { scale: 0.78, opacity: 0, ease: "power2.in" }, 0.52)
+        .to(".hero-fade", { opacity: 0, y: -24, ease: "none" }, 0)
         .fromTo(
           ".hero-recompose",
           { opacity: 0, scale: 0.92 },
@@ -111,49 +114,33 @@ export function HomeExperience({ children }: { children: ReactNode }) {
           duration: 0.7,
         });
 
-      /* ----------------------------------------------------------
-         Scene 2 — Manifesto: char-by-char reveal (pinned)
-      ---------------------------------------------------------- */
+      /* Scene 2 — natural scroll; notes converge without a second pin. */
       gsap
         .timeline({
           scrollTrigger: {
             trigger: ".manifesto-scene",
-            start: "top top",
-            end: "+=180%",
+            start: "top 82%",
+            end: "center 30%",
             scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
           },
         })
-        .fromTo(
-          ".manifesto-ghost",
-          { xPercent: 6 },
-          { xPercent: -16, ease: "none" },
-          0,
-        )
+        .fromTo(".manifesto-fragment", {
+          xPercent: (index) => [-120, 100, -80, 130][index] ?? 0,
+          yPercent: (index) => [-70, -45, 90, 70][index] ?? 0,
+          rotate: (index) => [-8, 6, 5, -7][index] ?? 0,
+          opacity: 0.1,
+        }, { xPercent: 0, yPercent: 0, rotate: 0, opacity: 1, stagger: 0.04, ease: "none" }, 0)
         .fromTo(
           gsap.utils.toArray<HTMLElement>(".m-char"),
-          { opacity: 0.07, yPercent: 45 },
+          { opacity: 0.06, yPercent: 35 },
           { opacity: 1, yPercent: 0, stagger: 0.02, ease: "none" },
-          0,
-        )
-        .fromTo(
-          ".manifesto-halo",
-          { scale: 0.55, opacity: 0 },
-          { scale: 1, opacity: 1, ease: "none" },
-          0,
+          0.18,
         )
         .fromTo(
           ".manifesto-sub",
           { opacity: 0, y: 28 },
           { opacity: 1, y: 0, ease: "none" },
           0.6,
-        )
-        .fromTo(
-          ".scene-marquee",
-          { opacity: 0 },
-          { opacity: 1, ease: "none" },
-          0.75,
         )
         .to({}, { duration: 0.4 });
 
@@ -310,6 +297,7 @@ export function HomeExperience({ children }: { children: ReactNode }) {
       if (tick) gsap.ticker.remove(tick);
       lenis?.destroy();
       root.removeEventListener("click", onAnchorClick);
+      window.removeEventListener("pointermove", onPointerMove);
       html.style.scrollBehavior = previousScrollBehavior;
     };
   }, []);

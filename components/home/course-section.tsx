@@ -1,46 +1,24 @@
-const courses = [
-  {
-    id: "MATH101",
-    name: "高等数学",
-    nameEn: "Advanced Mathematics",
-    meta: "林老师 · 工作量中高 · 评分示意 4.6",
-    note: "作业强度大但反馈具体。把每周的习题整理成自己的错题本，期末会轻松很多。",
-    outline: false,
-  },
-  {
-    id: "CS201",
-    name: "数据结构与算法",
-    nameEn: "Data Structures",
-    meta: "陈老师 · 讨论占比高 · 评分示意 4.8",
-    note: "小组项目要早点找节奏。老师反馈很具体，愿意投入的话收获极大。",
-    outline: true,
-  },
-  {
-    id: "SOC118",
-    name: "城市与社会观察",
-    nameEn: "Urban Studies",
-    meta: "周老师 · 阅读节奏稳定 · 评分示意 4.3",
-    note: "适合和其他硬课搭配。讨论课占一半，期末压力不会突然爆炸。",
-    outline: false,
-  },
-];
+"use client";
+
+import { useHomeI18n } from "@/components/home/home-i18n";
 
 export function CourseSection() {
+  const { copy } = useHomeI18n();
   return (
     <section
       id="course-guide"
-      className="relative overflow-hidden bg-[#080808] px-5 py-32 text-[#f5f5f5] sm:px-8 sm:py-44"
+      className="home-section relative overflow-hidden px-5 py-32 sm:px-8 sm:py-44"
     >
       <div className="section-head mx-auto max-w-6xl">
-        <p className="head-fade hx-caption">02 — Course Guide</p>
+        <p className="head-fade hx-caption">{copy.course.chapter}</p>
         <h2 className="head-fade mt-6 text-[clamp(2.6rem,7vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.02em]">
-          选课，不再<span className="hx-accent">开盲盒</span>。
+          {copy.course.titleLead}<span className="hx-accent">{copy.course.titleAccent}</span>
         </h2>
-        <p className="head-fade hx-caption mt-6">以下均为产品展示用示例内容</p>
+        <p className="head-fade hx-caption mt-6">{copy.course.disclaimer}</p>
       </div>
 
       <div className="mx-auto mt-24 max-w-6xl space-y-32 sm:space-y-44">
-        {courses.map((course, index) => (
+        {copy.course.items.map((course, index) => (
           <article
             key={course.id}
             className="world-course border-t border-[rgba(245,245,245,0.08)] pt-10"
@@ -53,7 +31,7 @@ export function CourseSection() {
             {/* Giant magazine headline — keyword collapses into story */}
             <h3
               className={`world-name mt-6 text-[clamp(3.2rem,9vw,8rem)] font-semibold leading-[1.04] tracking-[-0.02em] ${
-                course.outline ? "hx-outline" : ""
+                index === 1 ? "hx-outline" : ""
               }`}
             >
               {course.name}
@@ -64,7 +42,7 @@ export function CourseSection() {
               <p className="world-detail font-mono text-[13px] leading-6 text-[#8a8a8a]">
                 {course.meta}
               </p>
-              <blockquote className="world-detail border-l-2 border-[var(--lime)] pl-5 text-lg leading-8 text-[#f5f5f5]/90 sm:text-xl sm:leading-9">
+              <blockquote className="world-detail border-l-2 border-[var(--klein)] pl-5 text-lg leading-8 text-[var(--home-fg)] sm:text-xl sm:leading-9">
                 {course.note}
               </blockquote>
             </div>

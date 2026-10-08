@@ -28,7 +28,7 @@ type CodeTarget = "email" | "phone";
 type Notice = { tone: "error" | "info"; message: string } | null;
 
 const inputClass =
-  "h-12 w-full rounded-xl border border-white/[0.12] bg-white/[0.045] px-4 text-sm text-[#f5f5f5] outline-none transition placeholder:text-[#5f5f64] focus:border-[#b7ff3c]/60 focus:ring-2 focus:ring-[#b7ff3c]/10 disabled:cursor-not-allowed disabled:opacity-50";
+  "h-12 w-full rounded-sm border border-white/[0.16] bg-white/[0.035] px-4 text-sm text-[#f5f5f5] outline-none transition placeholder:text-[#5f5f64] focus:border-[#002FA7]/70 focus:ring-2 focus:ring-[#002FA7]/10 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function LoginForm({ callbackUrl = "/profile" }: { callbackUrl?: string }) {
   const router = useRouter();
@@ -197,7 +197,7 @@ export function LoginForm({ callbackUrl = "/profile" }: { callbackUrl?: string }
                       message: "密码找回接口将在下一阶段接入，当前没有发送重置邮件。",
                     })
                   }
-                  className="text-xs text-[#b7ff3c] hover:underline"
+                  className="text-xs text-[#002FA7] hover:underline"
                 >
                   忘记密码？
                 </button>
@@ -242,7 +242,7 @@ export function LoginForm({ callbackUrl = "/profile" }: { callbackUrl?: string }
                   }}
                   className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm transition ${
                     codeTarget === value
-                      ? "border-[#b7ff3c]/60 bg-[#b7ff3c]/[0.08] text-[#f5f5f5]"
+                      ? "border-[#002FA7]/60 bg-[#002FA7]/[0.08] text-[#f5f5f5]"
                       : "border-white/[0.10] text-[#77777d] hover:border-white/20 hover:text-[#f5f5f5]"
                   }`}
                 >
@@ -290,7 +290,7 @@ export function LoginForm({ callbackUrl = "/profile" }: { callbackUrl?: string }
                   type="button"
                   onClick={handleRequestCode}
                   disabled={pendingAction !== null}
-                  className="w-28 shrink-0 rounded-xl border border-white/[0.14] text-sm text-[#f5f5f5] transition hover:border-[#b7ff3c]/60 hover:text-[#b7ff3c] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="w-28 shrink-0 rounded-sm border border-white/[0.14] text-sm text-[#f5f5f5] transition hover:border-[#002FA7]/60 hover:text-[#002FA7] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {pendingAction === "code" ? <Loader2 className="mx-auto animate-spin" size={17} /> : "获取验证码"}
                 </button>
@@ -305,7 +305,7 @@ export function LoginForm({ callbackUrl = "/profile" }: { callbackUrl?: string }
         <button
           type="submit"
           disabled={pendingAction !== null}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#b7ff3c] text-sm font-semibold text-[#080808] transition hover:bg-[#c3ff5d] disabled:cursor-not-allowed disabled:opacity-55"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-sm bg-[#002FA7] text-sm font-semibold text-[#080808] transition hover:bg-[#1649c2] disabled:cursor-not-allowed disabled:opacity-55"
         >
           {pendingAction === "submit" && <Loader2 size={17} className="animate-spin" />}
           {mode === "password" ? "登录" : "验证并登录"}
@@ -314,7 +314,7 @@ export function LoginForm({ callbackUrl = "/profile" }: { callbackUrl?: string }
 
       <p className="mt-7 text-center text-sm text-[#77777d]">
         第一次来到屿途？
-        <Link href="/register" className="ml-2 font-medium text-[#f5f5f5] hover:text-[#b7ff3c]">创建账号</Link>
+        <Link href="/register" className="ml-2 font-medium text-[#f5f5f5] hover:text-[#002FA7]">创建账号</Link>
       </p>
     </div>
   );
@@ -345,7 +345,7 @@ function NoticeBox({ notice }: { notice: Exclude<Notice, null> }) {
       className={`flex items-start gap-2.5 rounded-xl border px-3.5 py-3 text-sm leading-5 ${
         notice.tone === "error"
           ? "border-red-400/20 bg-red-400/[0.07] text-red-200"
-          : "border-[#b7ff3c]/20 bg-[#b7ff3c]/[0.06] text-[#c9dca9]"
+          : "border-[#002FA7]/20 bg-[#002FA7]/[0.06] text-[#aab9ff]"
       }`}
     >
       <Icon size={16} className="mt-0.5 shrink-0" />

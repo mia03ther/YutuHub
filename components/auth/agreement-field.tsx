@@ -20,7 +20,7 @@ export function AgreementField({
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
         disabled={disabled}
-        className="mt-1 size-4 shrink-0 accent-[#b7ff3c]"
+        className="mt-1 size-4 shrink-0 accent-[#002FA7]"
       />
       <span>
         我已阅读并同意

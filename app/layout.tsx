@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppChrome } from "@/components/app-chrome";
+import {
+  LANGUAGE_STORAGE_KEY,
+  SUPPORTED_LANGUAGES,
+} from "@/lib/i18n/config";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,6 +33,10 @@ export const metadata: Metadata = {
   ],
 };
 
+const supportedLanguages = JSON.stringify(SUPPORTED_LANGUAGES);
+const languageStorageKey = JSON.stringify(LANGUAGE_STORAGE_KEY);
+const appearanceScript = `(function(){try{var r=document.documentElement;var s=localStorage.getItem("theme");var q=s==="light"||s==="dark"||s==="system"?s:"system";var d=q==="dark"||(q==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);r.dataset.theme=d?"dark":"light";r.dataset.themeSelection=q;r.classList.toggle("dark",d);r.style.colorScheme=d?"dark":"light";var a=${supportedLanguages};var l=localStorage.getItem(${languageStorageKey});if(a.indexOf(l)<0){var n=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""]).map(function(x){return String(x).toLowerCase()});l="zh-CN";for(var i=0;i<n.length;i++){var x=n[i];var m=a.find(function(v){var z=v.toLowerCase();return z===x||z.split("-")[0]===x.split("-")[0]});if(m){l=m;break}}}r.lang=l;r.dataset.locale=l;r.dataset.appearanceReady="true";}catch(e){}})();`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -37,14 +46,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script
-          // Apply the persisted theme before first paint to avoid a flash.
+          // Resolve theme and homepage locale before first paint.
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem("theme");var d=s==="dark"||((!s||s==="system")&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d){document.documentElement.dataset.theme="dark";document.documentElement.classList.add("dark");}}catch(e){}})();`,
+            __html: appearanceScript,
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+      <body className="min-h-full bg-background text-foreground">
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

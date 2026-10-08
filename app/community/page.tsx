@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "社区动态",
   description:
-    "YutuHub 社区动态：提问、组队、开源、需求。AI 生成内容一律标注来源，欢迎带着问题来。",
+    "YutuHub 校园社区：提问、组队、经验分享与同学互助，欢迎带着真实问题来。",
   path: "/community",
 });
 
@@ -20,7 +20,7 @@ export default function CommunityPage() {
       <PageIntro
         eyebrow="COMMUNITY"
         title="社区动态"
-        description="提问、组队、开源、提需求。每条动态都带作者等级，AI 生成内容单独标注来源。"
+        description="提问、组队、分享经验、发起互助。每条动态都保留作者与来源，让有用的信息能够继续流动。"
         meta={`${feed.length} 条最新动态`}
       />
 

@@ -33,7 +33,7 @@ type Notice = { tone: "error" | "info"; message: string } | null;
 
 const STEPS = ["选择学校", "学校邮箱", "邮箱验证", "手机验证", "设置账号", "完成"];
 const inputClass =
-  "h-12 w-full rounded-xl border border-white/[0.12] bg-white/[0.045] px-4 text-sm text-[#f5f5f5] outline-none transition placeholder:text-[#5f5f64] focus:border-[#b7ff3c]/60 focus:ring-2 focus:ring-[#b7ff3c]/10 disabled:cursor-not-allowed disabled:opacity-50";
+  "h-12 w-full rounded-sm border border-white/[0.16] bg-white/[0.035] px-4 text-sm text-[#f5f5f5] outline-none transition placeholder:text-[#5f5f64] focus:border-[#002FA7]/70 focus:ring-2 focus:ring-[#002FA7]/10 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -178,13 +178,13 @@ export function RegisterForm() {
       <div className="mb-8">
         <div className="mb-3 flex items-center justify-between text-xs text-[#6f6f74]">
           <span>STEP {Math.min(step + 1, STEPS.length)} / {STEPS.length}</span>
-          <span className="text-[#b7ff3c]">{STEPS[step]}</span>
+          <span className="text-[#002FA7]">{STEPS[step]}</span>
         </div>
         <div className="grid grid-cols-6 gap-1.5" aria-label="注册进度">
           {STEPS.map((label, index) => (
             <span
               key={label}
-              className={`h-1 rounded-full ${index <= step ? "bg-[#b7ff3c]" : "bg-white/[0.10]"}`}
+              className={`h-1 ${index <= step ? "bg-[#002FA7]" : "bg-white/[0.10]"}`}
               title={label}
             />
           ))}
@@ -212,18 +212,18 @@ export function RegisterForm() {
                     }}
                     className={`group flex min-h-20 items-center gap-3 rounded-2xl border p-3 text-left transition ${
                       selected
-                        ? "border-[#b7ff3c]/60 bg-[#b7ff3c]/[0.08]"
+                        ? "border-[#002FA7]/60 bg-[#002FA7]/[0.08]"
                         : item.isEnabled
                           ? "border-white/[0.10] hover:border-white/25"
                           : "border-white/[0.06] bg-white/[0.02] opacity-55"
                     }`}
                   >
-                    <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${selected ? "bg-[#b7ff3c] text-[#080808]" : "bg-white/[0.06] text-[#8a8a8a]"}`}>
+                    <span className={`flex size-10 shrink-0 items-center justify-center rounded-sm ${selected ? "bg-[#002FA7] text-[#080808]" : "bg-white/[0.06] text-[#8a8a8a]"}`}>
                       {selected ? <Check size={18} /> : <GraduationCap size={18} />}
                     </span>
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-medium">{item.name}</span>
-                      <span className={`mt-1 block text-xs ${item.isEnabled ? "text-[#b7ff3c]" : "text-[#77777d]"}`}>
+                      <span className={`mt-1 block text-xs ${item.isEnabled ? "text-[#002FA7]" : "text-[#77777d]"}`}>
                         {item.isEnabled ? "正式开放" : "即将开放"}
                       </span>
                     </span>
@@ -251,7 +251,7 @@ export function RegisterForm() {
                   type="button"
                   onClick={() => requestCode("email")}
                   disabled={pending !== null}
-                  className="w-28 shrink-0 rounded-xl border border-white/[0.14] text-sm transition hover:border-[#b7ff3c]/60 hover:text-[#b7ff3c] disabled:opacity-50"
+                  className="w-28 shrink-0 rounded-sm border border-white/[0.14] text-sm transition hover:border-[#002FA7]/60 hover:text-[#002FA7] disabled:opacity-50"
                 >
                   {pending === "email" ? <Loader2 size={17} className="mx-auto animate-spin" /> : "获取验证码"}
                 </button>
@@ -275,7 +275,7 @@ export function RegisterForm() {
                 className={`${inputClass} text-center text-lg tracking-[0.45em]`}
               />
             </Field>
-            <button type="button" onClick={() => requestCode("email")} disabled={pending !== null} className="mt-3 text-sm text-[#b7ff3c] hover:underline disabled:opacity-50">
+            <button type="button" onClick={() => requestCode("email")} disabled={pending !== null} className="mt-3 text-sm text-[#002FA7] hover:underline disabled:opacity-50">
               {pending === "email" ? "处理中…" : "重新获取验证码"}
             </button>
           </StepSection>
@@ -309,7 +309,7 @@ export function RegisterForm() {
                     autoComplete="one-time-code"
                     className={`${inputClass} min-w-0 flex-1 tracking-[0.3em]`}
                   />
-                  <button type="button" onClick={() => requestCode("phone")} disabled={pending !== null} className="w-28 shrink-0 rounded-xl border border-white/[0.14] text-sm transition hover:border-[#b7ff3c]/60 hover:text-[#b7ff3c] disabled:opacity-50">
+                  <button type="button" onClick={() => requestCode("phone")} disabled={pending !== null} className="w-28 shrink-0 rounded-sm border border-white/[0.14] text-sm transition hover:border-[#002FA7]/60 hover:text-[#002FA7] disabled:opacity-50">
                     {pending === "phone" ? <Loader2 size={17} className="mx-auto animate-spin" /> : "获取验证码"}
                   </button>
                 </div>
@@ -341,12 +341,12 @@ export function RegisterForm() {
 
         {step === 5 && (
           <div className="flex min-h-[310px] flex-col items-center justify-center text-center">
-            <span className="flex size-14 items-center justify-center rounded-full bg-[#b7ff3c] text-[#080808]"><Check size={24} /></span>
+            <span className="flex size-14 items-center justify-center rounded-full bg-[#002FA7] text-[#080808]"><Check size={24} /></span>
             <h2 className="mt-6 text-2xl font-semibold">账号已创建</h2>
             <p className="mt-3 max-w-sm text-sm leading-6 text-[#8a8a8a]">
               {registeredUser?.displayName ?? nickname}，你的密码账号已经可以使用。邮箱与手机号仍为待验证状态，验证服务接入后可继续完成认证。
             </p>
-            <Link href="/profile" className="mt-7 inline-flex h-11 items-center rounded-full border border-white/[0.14] px-5 text-sm transition hover:border-[#b7ff3c]/60 hover:text-[#b7ff3c]">
+            <Link href="/profile" className="mt-7 inline-flex h-11 items-center rounded-sm border border-white/[0.14] px-5 text-sm transition hover:border-[#002FA7]/60 hover:text-[#002FA7]">
               进入个人中心
             </Link>
           </div>
@@ -361,7 +361,7 @@ export function RegisterForm() {
             <button type="button" onClick={handleBack} disabled={step === 0 || pending !== null} className="inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm text-[#8a8a8a] transition hover:text-white disabled:invisible">
               <ArrowLeft size={16} />上一步
             </button>
-            <button type="button" onClick={handleNext} disabled={pending !== null} className="inline-flex h-11 items-center gap-2 rounded-full bg-[#b7ff3c] px-6 text-sm font-semibold text-[#080808] transition hover:bg-[#c3ff5d] disabled:opacity-55">
+            <button type="button" onClick={handleNext} disabled={pending !== null} className="inline-flex h-11 items-center gap-2 rounded-sm bg-[#002FA7] px-6 text-sm font-semibold text-[#080808] transition hover:bg-[#1649c2] disabled:opacity-55">
               {pending === "submit" ? <Loader2 size={16} className="animate-spin" /> : step === 4 ? <Check size={16} /> : <ArrowRight size={16} />}
               {step === 4 ? "创建账号" : step === 2 ? "暂不验证，继续" : "继续"}
             </button>
@@ -370,7 +370,7 @@ export function RegisterForm() {
       )}
 
       <p className="mt-7 text-center text-sm text-[#77777d]">
-        已有账号？<Link href="/login" className="ml-2 font-medium text-[#f5f5f5] hover:text-[#b7ff3c]">直接登录</Link>
+        已有账号？<Link href="/login" className="ml-2 font-medium text-[#f5f5f5] hover:text-[#002FA7]">直接登录</Link>
       </p>
     </div>
   );
@@ -398,7 +398,7 @@ function Field({ label, icon, children }: { label: string; icon: React.ReactNode
 function NoticeBox({ notice }: { notice: Exclude<Notice, null> }) {
   const Icon = notice.tone === "error" ? AlertCircle : CheckCircle2;
   return (
-    <div role={notice.tone === "error" ? "alert" : "status"} className={`flex items-start gap-2.5 rounded-xl border px-3.5 py-3 text-sm leading-5 ${notice.tone === "error" ? "border-red-400/20 bg-red-400/[0.07] text-red-200" : "border-[#b7ff3c]/20 bg-[#b7ff3c]/[0.06] text-[#c9dca9]"}`}>
+    <div role={notice.tone === "error" ? "alert" : "status"} className={`flex items-start gap-2.5 rounded-sm border px-3.5 py-3 text-sm leading-5 ${notice.tone === "error" ? "border-red-400/20 bg-red-400/[0.07] text-red-200" : "border-[#002FA7]/20 bg-[#002FA7]/[0.06] text-[#aab9ff]"}`}>
       <Icon size={16} className="mt-0.5 shrink-0" />
       <span>{notice.message}</span>
     </div>

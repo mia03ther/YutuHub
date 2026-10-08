@@ -3,11 +3,11 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yutuhub.com
 export const SITE = {
   name: "YutuHub",
   nameZh: "屿途",
-  title: "YutuHub · 连接校园知识，让 AI 加速成长",
+  title: "YutuHub · 让校园里的真实信息重新流动",
   description:
-    "YutuHub 是面向高校学生的 AI 驱动综合服务平台，提供 AI 工具库、校园技能交换、学习 Wiki、社区动态与项目展示。",
-  tagline: "面向高校学生的新一代 AI 驱动知识与服务社区",
-  heroTitle: "连接校园知识，让 AI 加速成长",
+    "YutuHub 是面向大学生的校园生活共创平台，让课程、饮食、交易与互助经验更容易被发现和补充。",
+  tagline: "把散落的校园经验汇成路，让下一位同学少走一点弯路。",
+  heroTitle: "让校园里的真实信息重新流动",
   url: SITE_URL,
   locale: "zh_CN",
   keywords: [

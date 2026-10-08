@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "项目展示",
   description:
-    "学生 AI 与 Web3 作品集。课程作业到上线产品，招队友、招用户、招第一个 star。",
+    "学生项目与校园共创作品集。从课程作业到上线产品，寻找队友、用户与真实反馈。",
   path: "/projects",
 });
 
@@ -19,7 +19,7 @@ export default async function ProjectsPage() {
       <PageIntro
         eyebrow="PROJECTS"
         title="项目展示"
-        description="学生 Builder 的作品集。写清楚在做什么、技术栈、以及现在最缺什么样的人。"
+        description="学生共创项目的公开档案。写清楚在做什么、怎样参与，以及现在最需要什么样的伙伴。"
         meta={`${projects.length} 个公开项目`}
       />
 
